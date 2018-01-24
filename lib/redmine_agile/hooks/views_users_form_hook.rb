@@ -19,8 +19,9 @@
 
 module RedmineAgile
   module Hooks
-    class ViewsProjectsForm < Redmine::Hook::ViewListener
-      render_on :view_projects_form, :partial => "projects/project_color_form"
+    class ViewsUsersHook < Redmine::Hook::ViewListener
+      preferences_hook = Redmine::VERSION.to_s > '2.5' ? :view_users_form_preferences : :view_users_form
+      render_on preferences_hook, :partial => 'users/user_color_form'
     end
   end
 end

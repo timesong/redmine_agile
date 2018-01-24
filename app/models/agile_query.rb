@@ -1,8 +1,8 @@
 # This file is a part of Redmin Agile (redmine_agile) plugin,
 # Agile board plugin for redmine
 #
-# Copyright (C) 2011-2016 RedmineCRM
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_agile is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ class AgileQuery < Query
   attr_reader :truncated
 
   self.queried_class = Issue
+  self.view_permission = :view_issues if Redmine::VERSION.to_s >= '3.4'
 
   self.available_columns = [
     QueryColumn.new(:id, :sortable => "#{Issue.table_name}.id", :default_order => 'desc', :caption => :label_agile_issue_id),
@@ -404,7 +405,7 @@ class AgileQuery < Query
     end
 
     if has_column_name?(:checklists)
-      scope = scope.eager_load(:checklists)
+      scope = scope.preload(:checklists)
     end
 
     if order_option.detect {|x| x.match("agile_data.position")}
@@ -452,7 +453,12 @@ class AgileQuery < Query
 
   def board_statuses
     if Redmine::VERSION.to_s > '2.4'
-      statuses = IssueStatus.where(:id => Tracker.eager_load(:issues => [:status, :project, :fixed_version]).where(statement).map(&:issue_statuses).flatten.uniq.map(&:id))
+      statuses =
+        if Redmine::VERSION.to_s >= '3.4' && project
+          project.rolled_up_statuses
+        else
+          IssueStatus.where(:id => Tracker.eager_load(:issues => [:status, :project, :fixed_version]).where(statement).map(&:issue_statuses).flatten.uniq.map(&:id))
+        end
       status_filter_values = (options[:f_status] if options)
       if status_filter_values
         result_statuses = statuses.where(:id => status_filter_values)
@@ -538,6 +544,9 @@ class AgileQuery < Query
         op = (operator == "!p" ? 'NOT IN' : 'IN')
         comp = (operator == "=!p" ? '<>' : '=')
         "#{Issue.table_name}.id #{op} (SELECT DISTINCT #{IssueRelation.table_name}.#{join_column} FROM #{IssueRelation.table_name}, #{Issue.table_name} relissues WHERE #{IssueRelation.table_name}.relation_type = '#{self.class.connection.quote_string(relation_type)}' AND #{IssueRelation.table_name}.#{target_join_column} = relissues.id AND relissues.project_id #{comp} #{value.first.to_i})"
+      when "*o", "!o"
+        op = (operator == "!o" ? 'NOT IN' : 'IN')
+        "#{Issue.table_name}.id #{op} (SELECT DISTINCT #{IssueRelation.table_name}.#{join_column} FROM #{IssueRelation.table_name}, #{Issue.table_name} relissues WHERE #{IssueRelation.table_name}.relation_type = '#{self.class.connection.quote_string(relation_type)}' AND #{IssueRelation.table_name}.#{target_join_column} = relissues.id AND relissues.status_id IN (SELECT id FROM #{IssueStatus.table_name} WHERE is_closed=#{self.class.connection.quoted_false}))"
       end
 
     if relation_options[:sym] == field && !options[:reverse]
@@ -562,7 +571,7 @@ class AgileQuery < Query
 
   def statement
     if values_for('fixed_version_id') == ['current_version'] && project
-      version = project.shared_versions.open.order(:effective_date).first
+      version = current_version
       # substitute id for current version
       filters['fixed_version_id'][:values] = [version.id.to_s] if version
     end
@@ -589,5 +598,11 @@ private
       where(condition_for_status)
   end
 
+  def current_version
+    return @current_version if @current_version
+    versions = project.shared_versions.open.where("LOWER(#{Version.table_name}.name) NOT LIKE LOWER(?)", 'backlog')
+    versions -= versions.select(&:completed?).reverse
+    @current_version = versions.to_a.uniq.sort.first
+  end
 
 end

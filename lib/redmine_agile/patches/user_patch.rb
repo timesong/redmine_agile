@@ -18,9 +18,22 @@
 # along with redmine_agile.  If not, see <http://www.gnu.org/licenses/>.
 
 module RedmineAgile
-  module Hooks
-    class ViewsProjectsForm < Redmine::Hook::ViewListener
-      render_on :view_projects_form, :partial => "projects/project_color_form"
+  module Patches
+
+    module UserPatch
+      def self.included(base)
+        base.class_eval do
+          unloadable
+          acts_as_colored
+          safe_attributes 'agile_color_attributes',
+                          :if => lambda {|user, current_user| (current_user.admin? || (user.new_record? && current_user.anonymous? && Setting.self_registration?)) && RedmineAgile.use_colors? }
+        end
+      end
     end
+
   end
+end
+
+unless User.included_modules.include?(RedmineAgile::Patches::UserPatch)
+  User.send(:include, RedmineAgile::Patches::UserPatch)
 end

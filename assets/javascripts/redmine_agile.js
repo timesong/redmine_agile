@@ -444,7 +444,7 @@
           } else if (offset >= tableOffsetTop && offset <= tableOffsetBottom) {
               $tableFixed.css('display', 'table');
               // Fix for chrome not redrawing header
-              $tableFixed.css('z-index', '1');
+              $tableFixed.css('z-index', '100');
           }
       }
 
@@ -649,4 +649,19 @@ function DisableNullFields() {
       $input.attr('disabled', 'disabled');
     }
   );
+};
+
+function linkGenerator(path, text) {
+  return '<a href="' + window.location.origin + window.location.pathname + path + ' ">' + text + '</a>'
+};
+
+function linkableAttributeFields() {
+  var status_label = $('.status.attribute .label')
+  status_label.html(linkGenerator('/status', status_label.html()));
+
+  var assigned_label = $('.assigned-to.attribute .label')
+  assigned_label.html(linkGenerator('/assignee', assigned_label.html()));
+
+  var progress_label = $('.progress.attribute .label')
+  progress_label.html(linkGenerator('/done_ratio', progress_label.html()));
 };

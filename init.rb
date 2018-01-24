@@ -1,8 +1,8 @@
 # This file is a part of Redmin Agile (redmine_agile) plugin,
 # Agile board plugin for redmine
 #
-# Copyright (C) 2011-2016 RedmineCRM
-# http://www.redminecrm.com/
+# Copyright (C) 2011-2017 RedmineUP
+# http://www.redmineup.com/
 #
 # redmine_agile is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,18 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_agile.  If not, see <http://www.gnu.org/licenses/>.
 
+requires_redmine_crm :version_or_higher => '0.0.32' rescue raise "\n\033[31mRedmine requires newer redmine_crm gem version.\nPlease update with 'bundle update redmine_crm'.\033[0m"
+
 require 'redmine'
 
-AGILE_VERSION_NUMBER = '1.4.2'
+AGILE_VERSION_NUMBER = '1.4.5'
 AGILE_VERSION_TYPE = "Light version"
 
 Redmine::Plugin.register :redmine_agile do
   name "Redmine Agile plugin (#{AGILE_VERSION_TYPE})"
-  author 'RedmineCRM'
+  author 'RedmineUP'
   description 'Scrum and Agile project management plugin for redmine'
   version AGILE_VERSION_NUMBER
-  url 'http://redminecrm.com'
-  author_url 'mailto:support@redminecrm.com'
+  url 'http://redmineup.com/pages/plugins/agile'
+  author_url 'mailto:support@redmineup.com'
 
   requires_redmine :version_or_higher => '2.3'
 
@@ -42,7 +44,7 @@ Redmine::Plugin.register :redmine_agile do
                               :after => :gantt,
                               :param => :project_id
 
-  menu :admin_menu, :agile, {:controller => 'settings', :action => 'plugin', :id => "redmine_agile"}, :caption => :label_agile
+  menu :admin_menu, :agile, {:controller => 'settings', :action => 'plugin', :id => "redmine_agile"}, :caption => :label_agile, :html => {:class => 'icon'}
 
   project_module :agile do
     permission :manage_public_agile_queries, {:agile_queries => [:new, :create, :edit, :update, :destroy]}, :require => :member

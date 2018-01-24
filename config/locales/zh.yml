@@ -95,9 +95,9 @@ zh:
   label_agile_light_free_version: 敏捷免费版
   label_agile_link_to_pro: 升级到PRO版
   label_agile_link_to_pro_demo: PRO版在线演示
-  label_agile_link_to_more_plugins: 查找更多RedmineCRM插件
+  label_agile_link_to_more_plugins: 查找更多RedmineUP插件
   label_agile_button_agree: 同意
-  label_agile_license: RedmineCRM 协议
+  label_agile_license: RedmineUP 协议
   label_agile_saving_boards: 保存白板
   label_agile_horizontal_swim_lines: 水平泳道线
   label_agile_board_sub_columns: 白板子列
@@ -117,7 +117,7 @@ zh:
 
   #1.4.0
   label_agile_esitmate_units: 单元评估
-  label_agile_trackers_for_sp: 追踪 story点
+  label_agile_trackers_for_sp: 追踪故事点
   label_agile_story_points: 故事要点
   field_story_points: 故事要点
   label_agile_charts_number_of_story_points: 故事要点数量

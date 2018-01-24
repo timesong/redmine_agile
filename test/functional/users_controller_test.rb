@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # This file is a part of Redmin Agile (redmine_agile) plugin,
 # Agile board plugin for redmine
 #
@@ -17,10 +19,17 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_agile.  If not, see <http://www.gnu.org/licenses/>.
 
-module RedmineAgile
-  module Hooks
-    class ViewsProjectsForm < Redmine::Hook::ViewListener
-      render_on :view_projects_form, :partial => "projects/project_color_form"
-    end
+require File.expand_path('../../test_helper', __FILE__)
+
+class UsersControllerTest < ActionController::TestCase
+  fixtures :users,
+           :roles,
+           :members,
+           :member_roles
+
+
+  def setup
+    @user = User.find(1)
+    @request.session[:user_id] = @user.id
   end
 end
