@@ -31,14 +31,14 @@ zh:
   label_agile_charts_issues_velocity: 速度
   label_agile_charts_lead_time: 交付周期
   label_agile_charts_average_lead_time: 平均交付周期
-  label_agile_chart_plural: 敏捷图标
-  permission_view_agile_charts: 浏览敏捷图标
+  label_agile_chart_plural: 敏捷图表
+  permission_view_agile_charts: 浏览敏捷图表
   label_agile_ideal_work_remaining: 理想
   label_agile_actual_work_remaining: 实际
   label_agile_chart: 图表
   label_agile_date_from: 自
   label_agile_date_to: 至
-  label_agile_chart_dates: 图标间隔
+  label_agile_chart_dates: 图表间隔
   label_agile_weighed_ideal_work_remaining: 理想权衡
   label_agile_status_colors: 状态颜色
   label_agile_charts_burnup: 问题燃烧图
