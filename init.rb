@@ -39,9 +39,9 @@ Redmine::Plugin.register :redmine_agile do
                        },
            :partial => 'settings/agile/general'
 
-  menu :project_menu, :agile, {:controller => 'agile_boards', :action => 'index' },
-                              :caption => :label_agile,
-                              :after => :gantt,
+  menu :project_menu, :agile, {:controller => 'agile_charts', :action => 'index' },
+                              :caption => :label_agile_charts_burnup,
+                              :before => :gantt,
                               :param => :project_id
 
   menu :admin_menu, :agile, {:controller => 'settings', :action => 'plugin', :id => "redmine_agile"}, :caption => :label_agile, :html => {:class => 'icon'}

@@ -41,7 +41,7 @@ zh:
   label_agile_chart_dates: 图表间隔
   label_agile_weighed_ideal_work_remaining: 理想权衡
   label_agile_status_colors: 状态颜色
-  label_agile_charts_burnup: 问题燃烧图
+  label_agile_charts_burnup: 燃尽图
   label_agile_charts_number_of_days: 天数
   label_agile_too_many_items: "该图表因超出可显示的最大项目数而不能被创建(%{max})"
   label_agile_time_reports_items_limit: 时间条目基于图表的问题限制
